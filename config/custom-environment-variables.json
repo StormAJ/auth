@@ -1,0 +1,9 @@
+{
+  "APIKey": "auth_APIKey",
+  "jwtPrivateKey": "auth_jwtPrivateKey",
+  "WebPW": "auth_WebPW"
+
+  // "APIKey": "auth_APIKey"
+  // "db": "vidly_db", // heroku config:set vidly_db=vidly_db=mongodb+srv://vidlyuser:1234@cluster-vidly-4zypl.mongodb.net/vidly1
+  // "PGHOST": "PGHOST"
+}

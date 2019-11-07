@@ -1,0 +1,32 @@
+{
+  "name": "auth-server",
+  "version": "0.0.1",
+  "private": true,
+  "description": "New Swagger API Project",
+  "keywords": [],
+  "author": "",
+  "license": "",
+  "main": "app.js",
+  "dependencies": {
+    "bcrypt": "^3.0.6",
+    "config": "^3.2.4",
+    "connect": "^3.7.0",
+    "express": "^4.12.3",
+    "fs": "0.0.1-security",
+    "generate-password": "^1.4.2",
+    "jsonwebtoken": "^8.5.1",
+    "nodemailer": "^6.3.1",
+    "pg": "^7.12.1",
+    "swagger-tools": "^0.10.4",
+    "winston": "^3.2.1",
+    "yaml": "^1.7.2"
+  },
+  "devDependencies": {
+    "jest": "^24.9.0",
+    "supertest": "^4.0.2"
+  },
+  "scripts": {
+    "start": "nodemon -e *.js,*.json,*.yaml app.js ",
+    "test": "jest --watchAll --verbose"
+  }
+}

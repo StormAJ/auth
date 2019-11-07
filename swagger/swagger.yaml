@@ -1,0 +1,250 @@
+swagger: "2.0"
+info:
+  version: "0.0.1"
+  title: User Authorization App
+host: localhost:3000
+basePath: /
+#
+
+schemes:
+  # tip: remove http to make production-grade
+  - http
+  - https
+# format of bodies a client can send (Content-Type)
+consumes:
+  - application/json
+# format of the responses to the client (Accepts)
+produces:
+  - application/json
+
+securityDefinitions:
+  Test:
+    type: apiKey
+    in: header
+    name: Authorization
+
+  AuthApiKey:
+    type: basic
+
+paths:
+  # /users/{email}:
+  /users:
+    x-swagger-router-controller: users
+
+    get:
+      description: Returns list of users
+      operationId: userList
+      security:
+        - AuthApiKey: []
+      parameters:
+        - in: header
+          name: x-api-key
+          type: string
+          required: true
+      responses:
+        "200":
+          description: Success
+          schema:
+            $ref: "#/definitions/users"
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+
+    post:
+      description: Creates user
+      operationId: userRegister
+      summary: Creates a new user.
+      consumes:
+        - application/json
+      parameters:
+        - in: header
+          name: x-api-key
+          type: string
+        - in: body
+          name: user
+          description: The user to create
+          schema:
+            $ref: "#/definitions/userRegister"
+      responses:
+        "200":
+          description: Success
+          schema:
+            $ref: "#/definitions/SuccessResponse"
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+
+    patch:
+      description: Change password
+      operationId: changePassword
+      summary: Change password
+      consumes:
+        - application/json
+      parameters:
+        - in: header
+          name: x-token
+          type: string
+        - in: body
+          name: password
+          description: New password
+          schema:
+            $ref: "#/definitions/userPassword"
+
+      responses:
+        "200":
+          description: Success
+          schema:
+            $ref: "#/definitions/SuccessResponse"
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+
+  /users/{email}:
+    x-swagger-router-controller: users
+
+    delete:
+      description: Deletes user
+      operationId: userDelete
+      security:
+        - AuthApiKey: []
+      summary: Deletes user
+      consumes:
+        - application/json
+      parameters:
+        - in: header
+          name: x-api-key
+          type: string
+          required: true
+        - in: path
+          name: email
+          type: string
+          required: true
+
+      responses:
+        "200":
+          description: Success
+          schema:
+            $ref: "#/definitions/SuccessResponse"
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+  /login:
+    x-swagger-router-controller: users
+    post:
+      description: User login
+      operationId: login
+      summary: User login.
+      consumes:
+        - application/json
+      parameters:
+        - in: body
+          name: user
+          description: The user to login
+          schema:
+            $ref: "#/definitions/userLogin"
+      responses:
+        "200":
+          description: Success
+          schema:
+            $ref: "#/definitions/SuccessResponse"
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+
+  /auth:
+    x-swagger-router-controller: users
+    get:
+      description: User authorization
+      operationId: auth
+      summary: User authorization
+      consumes:
+        - application/json
+      parameters:
+        - in: header
+          name: x-token
+          type: string
+
+      responses:
+        "200":
+          description: Success
+          schema:
+            $ref: "#/definitions/object"
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+
+definitions:
+  object:
+    type: "object"
+
+  token:
+    type: "object"
+    properties:
+      token:
+        type: "string"
+
+  userLogin:
+    type: "object"
+    required:
+      - email
+      - password
+    properties:
+      email:
+        type: "string"
+      password:
+        type: "string"
+
+  userPassword:
+    type: "object"
+    required:
+      - password
+    properties:
+      password:
+        type: "string"
+
+  userRegister:
+    type: "object"
+    required:
+      - email
+      - name
+    properties:
+      name:
+        type: "string"
+      email:
+        type: "string"
+
+  users:
+    type: "array"
+    items:
+      type: "object"
+      properties:
+        name:
+          type: "string"
+        email:
+          type: "string"
+        password:
+          type: "string"
+
+  Message:
+    type: string
+
+  SuccessResponse:
+    type: string
+    # required:
+    #   - message
+    # properties:
+    #   message:
+    #     type: string
+
+  ErrorResponse:
+    required:
+      - message
+    properties:
+      message:
+        type: string
