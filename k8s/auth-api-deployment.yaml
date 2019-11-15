@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: auth-api-deployment
+
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      component: auth-api
+
+  template:
+    metadata:
+      labels:
+        component: auth-api
+    spec:
+      containers:
+        - name: auth-api
+          image: arwedstorm/auth-api
+          ports:
+            - containerPort: 3000
+          env:
+            - name: auth_pgHost
+              value: pg-cluster-ip-service
+            - name: auth_pgPort
+              value: "5432"
+
+            - name: auth_APIKey
+              valueFrom:
+                secretKeyRef:
+                  name: auth-secret
+                  key: APIKey
+            - name: auth_jwtPrivateKey
+              valueFrom:
+                secretKeyRef:
+                  name: auth-secret
+                  key: jwtPrivateKey
+            - name: auth_WebPW
+              valueFrom:
+                secretKeyRef:
+                  name: auth-secret
+                  key: WebPW
+            - name: auth_pgPw
+              valueFrom:
+                secretKeyRef:
+                  name: auth-secret
+                  key: pgPw

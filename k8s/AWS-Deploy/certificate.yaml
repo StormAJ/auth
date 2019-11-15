@@ -1,0 +1,21 @@
+apiVersion: cert-manager.io/v1alpha2
+kind: Certificate
+metadata:
+  name: sabbas-de
+  namespace: default
+spec:
+  secretName: sabbas-de-tls
+  issuerRef:
+    name: letsencrypt-prod
+    kind: ClusterIssuer
+  commonName: sabbas.de
+  dnsNames:
+    - sabbas.de
+    - www.sabbas.de
+  acme:
+    config:
+      - http01:
+          ingressClass: nginx
+        domains:
+          - sabbas.de
+          - www.sabbas.de

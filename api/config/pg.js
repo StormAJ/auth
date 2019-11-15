@@ -2,11 +2,11 @@ const { Pool } = require("pg");
 const config = require("config");
 
 const pool = new Pool({
-  host: "localhost",
-  port: 6000,
+  host: config.get("pgHost"),
+  port: config.get("pgPort"),
+  password: config.get("pgPw"),
   user: "postgres",
-  database: "postgres",
-  password: "1234"
+  database: "postgres"
 });
 
 async function dbRequest(query, res) {

@@ -1,0 +1,13 @@
+# Loadbalancer to allow access swaggerUi on localhost:3000/docs to access localhost:3000
+apiVersion: v1
+kind: Service
+metadata:
+  name: auth-api-loadbalancer-service
+
+spec:
+  type: LoadBalancer
+  selector:
+    component: auth-api
+  ports:
+    - port: 3000
+      targetPort: 3000

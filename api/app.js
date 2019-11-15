@@ -23,7 +23,9 @@ var routerOptions = {
 };
 
 // try {
-const file = fs.readFileSync("./swagger/swagger.yaml", "utf8");
+const file = fs
+  .readFileSync("./swagger/swagger.yaml", "utf8")
+  .replace("${apiHost}", config.get("apiHost"));
 
 const swaggerDoc = YAML.parse(file);
 // } catch (err) {
@@ -69,7 +71,7 @@ swaggerTools.initializeMiddleware(swaggerDoc, function(middleware) {
 
 initDb(config.get("table")); // init table
 
-const port = process.env.PORT || 3000;
+const port = process.env.auth_apiPort || 3000;
 const server = app.listen(port, () => {
   console.log("listening on port .. ", port);
 });

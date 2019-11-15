@@ -2,7 +2,8 @@ swagger: "2.0"
 info:
   version: "0.0.1"
   title: User Authorization App
-host: localhost:3000
+# No standard swagger.yaml syntax: needs fs.replace() to access env-variables
+host: ${apiHost}
 basePath: /
 #
 

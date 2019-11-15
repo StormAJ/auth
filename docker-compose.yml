@@ -1,0 +1,22 @@
+version: "3"
+services:
+  postgres:
+    image: postgres
+    ports:
+      - "6001:5432"
+
+  auth-server:
+    restart: always
+    build:
+      context: ./api
+      dockerfile: ../env-settings/Dockerfile
+    # ports:
+    #   - "3000:3000"
+
+  nginx:
+    restart: always
+    build:
+      context: ./nginx
+    # internal port needs to be same as port in swagger.yaml, since swagger-ui will access auth-server via local host:port
+    ports:
+      - "4000:80"

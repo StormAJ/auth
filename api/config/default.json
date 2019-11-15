@@ -1,0 +1,10 @@
+{
+  "APIKey": "",
+  "jwtPrivateKey": "",
+  "WebPW": "",
+  "pgHost": "",
+  "pgPw": "",
+  "pgPort": "",
+  "table": "users",
+  "apiHost": ""
+}

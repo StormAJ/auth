@@ -1,7 +1,7 @@
 "use strict";
 
 const { dbRequest } = require("../config/pg");
-const bcrypt = require("bcrypt");
+const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const config = require("config");
 const { initNodemailer, emailHeader } = require("../startup/nodemailer");
@@ -33,7 +33,7 @@ function userRegister(req, res) {
       });
     const salt = await bcrypt.genSalt();
     const hash = await bcrypt.hash(password, salt);
-
+    // const hash = password;
     const result = await dbRequest(
       `INSERT INTO ${table} (name, email, pw) VALUES ('${name}', '${email}', '${hash}')`,
       res
@@ -81,6 +81,7 @@ function login(req, res) {
       res
     );
     if (user.rows[0] && (await bcrypt.compare(password, user.rows[0].pw))) {
+      // if (user.rows[0] && password === user.rows[0].pw) {
       delete user.rows[0].pw;
       const privateKey = config.get("jwtPrivateKey");
       const token = await jwt.sign(user.rows[0], privateKey, {
@@ -104,6 +105,7 @@ function changePassword(req, res) {
     const password = req.body.password;
     const salt = await bcrypt.genSalt();
     const hash = await bcrypt.hash(password, salt);
+    // const hash = password;
     const result = await dbRequest(
       `UPDATE ${table} SET pw='${hash}' WHERE email='${email}'`,
       res
