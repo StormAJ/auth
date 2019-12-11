@@ -2,14 +2,29 @@ version: "3"
 services:
   postgres:
     image: postgres
+    # export port for access to pgAdmin
     ports:
       - "6001:5432"
 
-  auth-server:
+  api:
     restart: always
     build:
       context: ./api
-      dockerfile: ../env-settings/Dockerfile
+      dockerfile: ../env-settings/api/Dockerfile
+    # volumes:
+    #   - /app/node_modules
+    #   - ./api:/app
+    # ports:
+    #   - "3001:3001"
+
+  gui:
+    restart: always
+    build:
+      context: ./gui
+      dockerfile: ../env-settings/gui/Dockerfile
+    # volumes:
+    #   - /app/node_modules
+    #   - ./gui:/app
     # ports:
     #   - "3000:3000"
 

@@ -8,29 +8,29 @@ var config = require("config"); // var app = require("connect")();
 var express = require("express");
 const { initDb } = require("./config/pg");
 const home = require("./routes/home");
+const cors = require("cors");
 
 //swaggerRouter configuration
 var routerOptions = {
   controllers: "./controllers",
-  useStubs: process.env.NODE_ENV === "development" ? true : false, // Conditionally turn on stubs (mock mode)
-  // useStubs: false,
-  docs: {
-    apiDocs: "/api-docs",
-    apiDocsPrefix: "",
-    swaggerUi: "/docs",
-    swaggerUiPrefix: ""
-  }
+  useStubs: process.env.NODE_ENV === "development" ? true : false // Conditionally turn on stubs (mock mode)
 };
 
-// try {
+//swaggerRouter configuration
+var uiOptions = {
+  apiDocs: "/api/api-docs",
+  apiDocsPrefix: "/api",
+  swaggerUi: "/api/docs",
+  swaggerUiPrefix: ""
+  // swaggerUiDir: "/api"
+  // }
+};
+
 const file = fs
   .readFileSync("./swagger/swagger.yaml", "utf8")
   .replace("${apiHost}", config.get("apiHost"));
 
 const swaggerDoc = YAML.parse(file);
-// } catch (err) {
-//   console.log("error: ", err);
-// }
 
 function authApiKey(req, def, token, callback) {
   if (req.headers["x-api-key"] != config.get("APIKey")) {
@@ -40,9 +40,10 @@ function authApiKey(req, def, token, callback) {
 
 app.use(express.json()); // converts the http request data into a json object, accessed by req.body
 app.use(express.urlencoded({ extended: true })); // read data from request added to url
+app.use(cors()); // enables CORS access (Cross Origin Resource Sharing)
 // app.use(express.static("public")); // return static content from folder "./pulbic" on http request to url "/filename"
 // app.use(helmet());
-app.use("/", home);
+app.use("/api", home);
 // Initialize the Swagger middleware
 swaggerTools.initializeMiddleware(swaggerDoc, function(middleware) {
   // Interpret Swagger resources and attach metadata to request - must be first in swagger-tools middleware chain
@@ -56,24 +57,25 @@ swaggerTools.initializeMiddleware(swaggerDoc, function(middleware) {
   );
 
   // Validate Swagger requests
-  app.use(
-    middleware.swaggerValidator({
-      // validateResponse: true
-    })
-  );
+  // app.use(
+  //   middleware.swaggerValidator({
+  //     // validateResponse: true
+  //   })
+  // );
 
   // Route validated requests to appropriate controller
   app.use(middleware.swaggerRouter(routerOptions));
 
   // Serve the Swagger documents and Swagger UI
-  app.use(middleware.swaggerUi());
+  app.use(middleware.swaggerUi(uiOptions));
 });
 
 initDb(config.get("table")); // init table
 
-const port = process.env.auth_apiPort || 3000;
+const port = process.env.auth_apiPort || 3001;
 const server = app.listen(port, () => {
   console.log("listening on port .. ", port);
+  // document.cookie = "auth_test=auth";
 });
 
 module.exports = server;

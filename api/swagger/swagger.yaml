@@ -4,7 +4,7 @@ info:
   title: User Authorization App
 # No standard swagger.yaml syntax: needs fs.replace() to access env-variables
 host: ${apiHost}
-basePath: /
+basePath: /api
 #
 
 schemes:
@@ -35,8 +35,8 @@ paths:
     get:
       description: Returns list of users
       operationId: userList
-      security:
-        - AuthApiKey: []
+      # security:
+      #   - AuthApiKey: []
       parameters:
         - in: header
           name: x-api-key

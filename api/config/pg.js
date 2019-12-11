@@ -25,7 +25,7 @@ async function initDb(table) {
       "(name character varying, " +
       "email character varying, " +
       "pw character varying, " +
-      "created date)"
+      "created character varying)"
   );
   try {
     await pool.query(`ALTER TABLE ${table} ` + "ADD PRIMARY KEY (email)");

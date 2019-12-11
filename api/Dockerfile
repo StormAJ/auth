@@ -1,3 +1,4 @@
+## Docker file used with K8S
 FROM node:alpine as builder
 WORKDIR '/app'
 COPY package.json .
@@ -11,12 +12,10 @@ RUN npm install
 # ENV auth_WebPW=
 # ENV auth_pgPw=
 
-
 ENV auth_pgHost=postgres
 ENV auth_pgPort=5432
+# used by swaggerUI:
 ENV auth_apiHost=localhost:80
+
 COPY . .
 CMD ["npm", "start"] 
-
-# FROM nginx
-# COPY --from=builder /app /usr/share/nginx/html

@@ -11,10 +11,18 @@ const table = config.get("table");
 
 function userList(req, res) {
   (async () => {
-    const users = await dbRequest(`SELECT * FROM ${table}`, res);
-    if (users) {
-      for (let row of users.rows) delete row.pw;
-      res.send(users.rows);
+    const result = await dbRequest(`SELECT * FROM ${table}`, res);
+    if (result) {
+      let users = [{}];
+      if (req.headers["x-api-key"] !== config.get("APIKey")) {
+        Object.keys(result.rows[0]).map(k => (users[0][k] = ""));
+        delete users[0].created;
+      } else users = result.rows;
+      for (let row of users) {
+        delete row.pw;
+      }
+
+      res.send(users);
     }
   })();
 }
@@ -25,6 +33,8 @@ function userRegister(req, res) {
     const name = req.body.name;
     const email = req.body.email;
     const skipEmail = req.headers["x-api-key"] === config.get("APIKey");
+    const date = new Date().toString();
+    console.log("date: ", date);
 
     if (!skipEmail)
       password = generator.generate({
@@ -35,7 +45,7 @@ function userRegister(req, res) {
     const hash = await bcrypt.hash(password, salt);
     // const hash = password;
     const result = await dbRequest(
-      `INSERT INTO ${table} (name, email, pw) VALUES ('${name}', '${email}', '${hash}')`,
+      `INSERT INTO ${table} (name, email, pw, created) VALUES ('${name}', '${email}', '${hash}', '${date}')`,
       res
     );
     if (result) {
@@ -133,7 +143,12 @@ function auth(req, res) {
     const token = req.headers["x-token"];
     try {
       const decoded = await jwt.verify(token, config.get("jwtPrivateKey"));
-      res.send(decoded);
+      const user = await dbRequest(
+        `SELECT * FROM ${table} WHERE email='${decoded.email}'`,
+        res
+      );
+      delete user.rows[0].pw;
+      res.send(user.rows[0]);
     } catch (err) {
       res.status(403).send("token not valid");
     }

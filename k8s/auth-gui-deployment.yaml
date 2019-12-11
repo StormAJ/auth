@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: auth-gui-deployment
+
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      component: auth-gui
+
+  template:
+    metadata:
+      labels:
+        component: auth-gui
+    spec:
+      containers:
+        - name: auth-gui
+          image: arwedstorm/auth-gui
+          ports:
+            - containerPort: 3000
+          env:
+            - name: REACT_APP_apiUrl
+              value: http://localhost/api
