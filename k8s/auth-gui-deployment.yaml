@@ -22,6 +22,6 @@ spec:
           env:
             - name: REACT_APP_apiUrl
               # used with local k8s:
-              # value: http://localhost/api
+              value: http://localhost/api
               # used with GC k8s:
-              value: http://34.77.228.236/api
+              # value: http://34.77.228.236/api
