@@ -55,7 +55,9 @@ class RegisterForm extends Form {
 
           <form onSubmit={this.handleSubmit}>
             <Col xs={"auto"}>
-              {Object.keys(user).map(k => this.renderInput(k, k))}
+              {user && Object.keys(user).map(k => this.renderInput(k, k))}
+              {/* {this.renderInput("name", "Name")}
+              {this.renderInput("email", "Email")} */}
               {this.renderButton("Submit")}
               <h5></h5>
             </Col>

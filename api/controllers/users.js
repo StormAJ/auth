@@ -1,6 +1,6 @@
 "use strict";
 
-const { dbRequest } = require("../config/pg");
+const { dbRequest, initDb } = require("../config/pg");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const config = require("config");
@@ -14,16 +14,34 @@ function userList(req, res) {
     const result = await dbRequest(`SELECT * FROM ${table}`, res);
     if (result) {
       let users = [{}];
-      if (req.headers["x-api-key"] !== config.get("APIKey")) {
-        Object.keys(result.rows[0]).map(k => (users[0][k] = ""));
-        delete users[0].created;
-      } else users = result.rows;
-      for (let row of users) {
-        delete row.pw;
+      if (result.rowCount === 0) {
+        result.fields.forEach(i => {
+          const key = Object.values(i.name).join("");
+          if (key !== "created" && key !== "pw") users[0][key] = "";
+        });
+        res.send(users);
+      } else {
+        if (req.headers["x-api-key"] !== config.get("APIKey")) {
+          Object.keys(result.rows[0]).map(k => (users[0][k] = ""));
+          delete users[0].created;
+        } else users = result.rows;
+        for (let row of users) {
+          delete row.pw;
+        }
+        res.send(users);
       }
-
-      res.send(users);
     }
+  })();
+}
+
+function resetDb(req, res) {
+  (async () => {
+    if (req.headers["x-api-key"] !== config.get("APIKey")) {
+      res.status(403).send("not authorized");
+    } else {
+      initDb(table);
+    }
+    res.send("DB has been reset");
   })();
 }
 
@@ -71,14 +89,16 @@ function userRegister(req, res) {
 
 function userDelete(req, res) {
   (async () => {
-    const email = req.swagger.params.email.value;
-    const result = await dbRequest(
-      `DELETE FROM ${table} WHERE email='${email}'`,
-      res
-    );
-    if (result)
-      if (result.rowCount == 0) res.status(401).send("unknown user");
-      else res.send("deleted");
+    if (req.headers["x-api-key"] === config.get("APIKey")) {
+      const email = req.swagger.params.email.value;
+      const result = await dbRequest(
+        `DELETE FROM ${table} WHERE email='${email}'`,
+        res
+      );
+      if (result)
+        if (result.rowCount == 0) res.status(401).send("unknown user");
+        else res.send("deleted");
+    } else res.status(403).send("not autorized");
   })();
 }
 
@@ -161,5 +181,6 @@ module.exports = {
   userDelete,
   login,
   auth,
-  changePassword
+  changePassword,
+  resetDb
 };

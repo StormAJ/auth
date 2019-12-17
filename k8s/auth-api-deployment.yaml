@@ -15,7 +15,7 @@ spec:
         component: auth-api
     spec:
       containers:
-        - name: auth-api
+        - name: api
           image: arwedstorm/auth-api
           ports:
             - containerPort: 3001

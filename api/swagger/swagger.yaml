@@ -29,6 +29,30 @@ securityDefinitions:
 
 paths:
   # /users/{email}:
+  /reset:
+    x-swagger-router-controller: users
+
+    post:
+      description: Reset DB
+      operationId: resetDb
+      summary: Reset DB
+      consumes:
+        - application/json
+      parameters:
+        - in: header
+          name: x-api-key
+          type: string
+
+      responses:
+        "200":
+          description: Success
+          schema:
+            $ref: "#/definitions/SuccessResponse"
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+
   /users:
     x-swagger-router-controller: users
 

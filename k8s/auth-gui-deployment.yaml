@@ -15,7 +15,7 @@ spec:
         component: auth-gui
     spec:
       containers:
-        - name: auth-gui
+        - name: gui
           image: arwedstorm/auth-gui
           ports:
             - containerPort: 3000
