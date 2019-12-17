@@ -21,4 +21,7 @@ spec:
             - containerPort: 3000
           env:
             - name: REACT_APP_apiUrl
-              value: http://localhost/api
+              # used with local k8s:
+              # value: http://localhost/api
+              # used with GC k8s:
+              value: http://34.77.228.236/api
