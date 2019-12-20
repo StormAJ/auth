@@ -24,6 +24,8 @@ spec:
               value: pg-cluster-ip-service
             - name: auth_pgPort
               value: "5432"
+            - name: auth_apiHost
+              value: localhost
 
             - name: auth_APIKey
               valueFrom:

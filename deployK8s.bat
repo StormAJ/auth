@@ -1,6 +1,6 @@
 echo "Docker build .."
 docker build -t arwedstorm/auth-api ./api
-docker build -t arwedstorm/auth-gui ./gui
+docker build -f ./gui/Dockerfiles/k8s-local/Dockerfile -t arwedstorm/auth-gui ./gui 
 
 echo "Push to docker-hub .."
 docker push arwedstorm/auth-api

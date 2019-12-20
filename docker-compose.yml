@@ -21,7 +21,7 @@ services:
     restart: always
     build:
       context: ./gui
-      dockerfile: ../env-settings/gui/Dockerfile
+      dockerfile: ./Dockerfiles/docker-compose/Dockerfile
     # volumes:
     #   - /app/node_modules
     #   - ./gui:/app

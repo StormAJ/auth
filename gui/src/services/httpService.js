@@ -1,11 +1,9 @@
 import axios from "axios";
 import { toast } from "react-toastify";
 
-// const apiUrl = process.env.REACT_APP_apiUrl;
-const apiUrl = "http://34.77.228.236/api";
-
+const apiUrl = process.env.REACT_APP_apiUrl;
 axios.defaults.baseURL = apiUrl;
-console.log("apiUrl: ", apiUrl);
+console.log("apiUrl : ", apiUrl);
 // const config = require("config");
 
 axios.interceptors.response.use(null, error => {
