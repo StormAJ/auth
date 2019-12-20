@@ -3,7 +3,7 @@ const router = express.Router();
 // const index = require("../views/index.pug");
 
 router.get("/", (req, res) => {
-  return res.send(" A U T H - api");
+  return res.send(" A U T H - api -1");
   // return res.render.render(index, {
   //   title: "My express app",
   //   message: "Hello"
