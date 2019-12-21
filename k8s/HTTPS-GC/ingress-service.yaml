@@ -22,16 +22,26 @@ spec:
       secretName: sabbas-de-tls
   rules:
     - host: sabbas.de
-      http:
+    - http:
         paths:
           - path: /
-            backend:
-              serviceName: auth-api-ip-service
-              servicePort: 3000
+              backend:
+                serviceName: auth-gui-cluster-ip-service
+                servicePort: 3000
+          - path: /api/
+                backend:
+                  serviceName: auth-api-cluster-ip-service
+                  servicePort: 3001
+
     - host: www.sabbas.de
     - http:
         paths:
           - path: /
-            backend:
-              serviceName: vidly-cluster-ip-service
-              servicePort: 3000
+              backend:
+                serviceName: auth-gui-cluster-ip-service
+                servicePort: 3000
+          - path: /api/
+                backend:
+                  serviceName: auth-api-cluster-ip-service
+                  servicePort: 3001
+

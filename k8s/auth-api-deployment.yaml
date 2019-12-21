@@ -25,7 +25,7 @@ spec:
             - name: auth_pgPort
               value: "5432"
             - name: auth_apiHost
-              value: 34.77.228.236
+              value: www.sabbas.de
 
             - name: auth_APIKey
               valueFrom:

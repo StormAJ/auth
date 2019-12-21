@@ -8,7 +8,10 @@ docker push arwedstorm/auth-api:$SHA
 docker push arwedstorm/auth-gui:latest
 docker push arwedstorm/auth-gui:$SHA
 
-echo "Update Kubernetes culster .. "
+echo "Update kubernetes culster .. "
 kubectl apply -f k8s
 kubectl set image deployment auth-api-deployment auth-api=arwedstorm/auth-api:$SHA
 kubectl set image deployment auth-gui-deployment auth-gui=arwedstorm/auth-gui:$SHA
+
+echo "Setup https services .. "
+kubectl apply -f k8s/HTTPS-GC

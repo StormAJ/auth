@@ -7,7 +7,7 @@ RUN npm install
 COPY . .
 
 # environment variables must be set at build time (cannot be accessed in react at run-time)
-ENV REACT_APP_apiUrl=http://34.77.228.236/api
+ENV REACT_APP_apiUrl=http://www.sabbas.de/api
 
 RUN npm run build
 
